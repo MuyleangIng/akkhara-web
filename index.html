@@ -90,6 +90,11 @@ h1 .km{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-backgr
 .cand:first-child{border-top:none}
 .cand span{color:var(--muted);font-size:13px;width:12px;font-family:Inter,sans-serif}
 .cand.sel{background:var(--green-bg);box-shadow:inset 3px 0 0 var(--green)}
+/* fixed heights: the demo box must never change size while it plays (Khmer lines are taller than Latin) */
+.cand{height:48px;line-height:30px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cand.empty span{opacity:.35}
+.typed{height:34px;line-height:34px;white-space:nowrap;overflow:hidden}
+.out{height:58px;line-height:34px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .out{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--bg2);font-size:22px;min-height:52px}
 .hint{font-size:13px;color:var(--muted);margin-top:10px}
 
@@ -321,7 +326,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <div class="demo-label">You type</div>
       <div class="typed"><u id="typed"></u><span class="caret"></span></div>
       <div class="demo-label" style="margin-bottom:8px">Akkhara suggests</div>
-      <div class="cands km" id="cands"></div>
+      <div class="cands km" id="cands"><div class="cand empty"><span>1</span>&nbsp;</div><div class="cand empty"><span>2</span>&nbsp;</div><div class="cand empty"><span>3</span>&nbsp;</div><div class="cand empty"><span>4</span>&nbsp;</div><div class="cand empty"><span>5</span>&nbsp;</div></div>
       <div class="demo-label" style="margin-top:16px">Inserted</div>
       <div class="out km" id="out"></div>
       <div class="hint">Enter inserts the highlighted one · real model outputs</div>
@@ -593,14 +598,17 @@ const EXAMPLES=[
 ];
 const typed=document.getElementById('typed'), cands=document.getElementById('cands'), out=document.getElementById('out');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+// always 5 rows (empty ones keep their space), so the box never changes height while it plays
 function show(list,n){
-  cands.innerHTML=list.slice(0,n).map((t,i)=>`<div class="cand${i===0?' sel':''}"><span>${i+1}</span>${t}</div>`).join('');
+  cands.innerHTML=[0,1,2,3,4].map(i=>i<n&&list[i]
+    ? `<div class="cand${i===0?' sel':''}"><span>${i+1}</span>${list[i]}</div>`
+    : `<div class="cand empty"><span>${i+1}</span>&nbsp;</div>`).join('');
 }
 async function loop(){
   const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
   for(let k=0;;k=(k+1)%EXAMPLES.length){
     const [latin,list]=EXAMPLES[k];
-    typed.textContent=''; out.textContent=''; cands.innerHTML='';
+    typed.textContent=''; out.textContent=''; show([],0);
     if(still){typed.textContent=latin; show(list,5); out.textContent=list[0]; return;}
     for(let i=1;i<=latin.length;i++){
       typed.textContent=latin.slice(0,i);

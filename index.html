@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akkhara · Type Sing Khmer, get ខ្មែរ</title>
+<meta name="description" content="Akkhara turns Sing Khmer (romanized chat Khmer) into Khmer script as you type. Offline AI keyboard for Android, Windows and Mac. Made by Ing Muyleang.">
+<meta property="og:title" content="Akkhara · Type Sing Khmer, get ខ្មែរ">
+<meta property="og:description" content="Offline AI keyboard: nh jg tv sala rean → ខ្ញុំចង់ទៅសាលារៀន. Android, Windows, Mac. iOS soon.">
+<meta property="og:image" content="assets/logo.png">
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --bg2:#f6f8fb; --card:#ffffff; --ink:#0f172a; --ink2:#334155; --muted:#64748b;
+  --line:#e2e8f0; --blue:#2563eb; --blue2:#3b82f6; --green:#1baf7a; --green-bg:#e3f6ee;
+  --shadow:0 1px 2px rgba(15,23,42,.06),0 8px 24px rgba(15,23,42,.06); --radius:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b1020; --bg2:#0f1629; --card:#131b31; --ink:#e8edf7; --ink2:#c3cce0; --muted:#8b97b0;
+  --line:#243049; --blue:#5b8cff; --blue2:#7aa2ff; --green:#33c58f; --green-bg:#11352a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+}}
+:root[data-theme="dark"]{
+  --bg:#0b1020; --bg2:#0f1629; --card:#131b31; --ink:#e8edf7; --ink2:#c3cce0; --muted:#8b97b0;
+  --line:#243049; --blue:#5b8cff; --blue2:#7aa2ff; --green:#33c58f; --green-bg:#11352a;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,"Kantumruy Pro",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.km{font-family:"Kantumruy Pro",Inter,sans-serif}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+code,kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;background:var(--card);color:var(--ink)}
+
+/* icons (Lucide + Simple Icons, inline sprite) */
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px}
+.ic.ib{fill:currentColor;stroke:none}
+/* glass */
+:root{--glass:rgba(255,255,255,.62);--glass-line:rgba(255,255,255,.7);--glass-shadow:0 8px 32px rgba(15,23,42,.14)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--glass:rgba(19,27,49,.6);--glass-line:rgba(255,255,255,.12);--glass-shadow:0 8px 32px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{--glass:rgba(19,27,49,.6);--glass-line:rgba(255,255,255,.12);--glass-shadow:0 8px 32px rgba(0,0,0,.45)}
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border:1px solid var(--glass-line);box-shadow:var(--glass-shadow)}
+/* floating top bar */
+nav:not(#dock){position:sticky;top:10px;z-index:30;padding:0 12px}
+nav .wrap{display:flex;align-items:center;gap:14px;height:58px;max-width:1160px;border-radius:18px;padding:0 10px 0 14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;color:var(--ink)}
+.brand img{width:30px;height:30px;border-radius:8px}
+.navlinks{display:flex;gap:2px;margin-left:auto;font-size:14px}
+.navlinks a{color:var(--ink2);display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:11px;white-space:nowrap}
+.navlinks a:hover{text-decoration:none;background:color-mix(in srgb,var(--blue) 10%,transparent);color:var(--ink)}
+.iconbtn{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:11px;border:1px solid var(--glass-line);background:transparent;color:var(--ink);cursor:pointer}
+.iconbtn .ic{width:19px;height:19px}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:10px;padding:11px 18px;font-weight:600;font-size:15px;border:1px solid transparent;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--blue) 35%,transparent)}
+.btn-ghost{background:var(--card);color:var(--ink);border-color:var(--line)}
+.btn-sm{padding:7px 13px;font-size:14px}
+.cmd{display:flex;gap:10px;align-items:center;margin-top:14px;background:#1e1e1e;border-radius:12px;padding:12px 12px 12px 16px}
+.cmd code{flex:1;min-width:0;color:#e6e6e6;overflow-x:auto;white-space:nowrap;font-size:13.5px}
+.cmd .btn{flex:none}
+
+/* hero */
+.hero{padding:72px 0 56px;background:radial-gradient(1100px 420px at 75% -10%,color-mix(in srgb,var(--blue2) 22%,transparent),transparent),var(--bg)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.pill{display:inline-flex;gap:8px;align-items:center;background:var(--green-bg);color:var(--green);font-weight:600;font-size:13px;border-radius:999px;padding:5px 12px}
+h1{font-size:clamp(36px,5.4vw,60px);line-height:1.08;margin:16px 0 14px;letter-spacing:-.02em;font-weight:800}
+h1 .km{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{font-size:19px;color:var(--ink2);max-width:540px;margin:0 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.trust{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;color:var(--muted);font-size:14px}
+.trust b{color:var(--ink)}
+
+/* demo */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:22px}
+.demo-top{display:flex;gap:6px;margin-bottom:16px}
+.demo-top i{width:11px;height:11px;border-radius:50%;background:var(--line);display:block}
+.demo-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.typed{font-size:22px;min-height:34px;margin:6px 0 14px;font-family:ui-monospace,Menlo,Consolas,monospace}
+.typed u{text-decoration-thickness:2px;text-underline-offset:5px}
+.caret{display:inline-block;width:2px;height:24px;background:var(--blue);vertical-align:-4px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.cands{border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cand{display:flex;gap:12px;align-items:center;padding:9px 14px;font-size:20px;border-top:1px solid var(--line);transition:background .2s}
+.cand:first-child{border-top:none}
+.cand span{color:var(--muted);font-size:13px;width:12px;font-family:Inter,sans-serif}
+.cand.sel{background:var(--green-bg);box-shadow:inset 3px 0 0 var(--green)}
+.out{margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--bg2);font-size:22px;min-height:52px}
+.hint{font-size:13px;color:var(--muted);margin-top:10px}
+
+/* sections */
+section{padding:76px 0}
+section.alt{background:var(--bg2)}
+.eyebrow{color:var(--blue);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;margin:8px 0 12px;letter-spacing:-.015em}
+.sub{color:var(--ink2);font-size:18px;max-width:680px;margin:0 0 36px}
+.grid{display:grid;gap:18px}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.card h3{margin:10px 0 6px;font-size:19px}
+.card p{margin:0 0 14px;color:var(--ink2);font-size:15px}
+.icon{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:color-mix(in srgb,var(--blue) 12%,transparent);color:var(--blue)}
+.icon svg{width:24px;height:24px}
+.icon .ic{width:24px;height:24px}
+.status{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.st-ok{background:var(--green-bg);color:var(--green)}
+.st-test{background:color-mix(in srgb,#f59e0b 16%,transparent);color:#b45309}
+.st-soon{background:color-mix(in srgb,var(--muted) 16%,transparent);color:var(--muted)}
+:root[data-theme="dark"] .st-test{color:#fbbf24}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .st-test{color:#fbbf24}}
+.platform{display:flex;flex-direction:column}
+.platform .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.meta{font-size:13px;color:var(--muted)}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+.stat{text-align:center;padding:22px 10px}
+.stat b{display:block;font-size:38px;line-height:1.1;letter-spacing:-.02em;color:var(--ink)}
+.stat span{color:var(--muted);font-size:14px}
+
+.steps{counter-reset:s}
+.step{position:relative;padding-left:56px}
+.step::before{counter-increment:s;content:counter(s);position:absolute;left:0;top:18px;width:38px;height:38px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;display:grid;place-items:center}
+.figure{border-radius:14px;border:1px solid var(--line);background:#fff;width:100%;display:block}
+
+table.ex{width:100%;border-collapse:collapse;font-size:16px}
+table.ex td{padding:10px 12px;border-top:1px solid var(--line)}
+table.ex td:first-child{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--ink2);width:46%}
+table.ex td:last-child{font-size:19px}
+
+/* support */
+.support{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:stretch}
+.goal{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.goal:first-of-type{border-top:none}
+.goal b{display:block}
+.goal small{color:var(--muted)}
+.price{font-weight:800;font-size:20px;white-space:nowrap}
+.bank{background:linear-gradient(135deg,#0d3b66,#145a8d);color:#fff;border-radius:18px;padding:26px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
+.bank .label{opacity:.8;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+.acct{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:30px;letter-spacing:.06em;font-weight:700}
+.copy{align-self:flex-start;background:#ffffff22;color:#fff;border:1px solid #ffffff44}
+.bank small{opacity:.85}
+
+/* anchors land below the sticky bar */
+section,header{scroll-margin-top:70px}
+/* phone menu */
+#menuBtn{display:none}
+/* phone: floating glass dock at the bottom + a glass sheet with every link */
+#dock{display:none}
+#mobileMenu{display:none;position:fixed;left:12px;right:12px;bottom:92px;z-index:40;border-radius:22px;padding:8px;max-height:70vh;overflow:auto}
+#mobileMenu.open{display:block;animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+#mobileMenu .grp{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 12px 4px}
+#mobileMenu a{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;color:var(--ink);font-weight:600;font-size:16px}
+#mobileMenu a:hover,#mobileMenu a:active{text-decoration:none;background:color-mix(in srgb,var(--blue) 10%,transparent)}
+#mobileMenu a .ic{width:20px;height:20px;color:var(--blue)}
+#mobileMenu a small{margin-left:auto;color:var(--muted);font-weight:500;font-size:12px}
+.navlinks a.active{color:var(--blue);font-weight:600;background:color-mix(in srgb,var(--blue) 12%,transparent)}
+/* figures: tap to see them big */
+.zoom{cursor:zoom-in;position:relative;display:block}
+.zoom::after{content:"⤢ Tap to zoom";position:absolute;right:10px;bottom:10px;font-size:12px;font-weight:600;background:rgba(15,23,42,.72);color:#fff;border-radius:999px;padding:4px 10px;pointer-events:none}
+#lightbox{display:none;position:fixed;inset:0;z-index:50;background:rgba(5,8,18,.92);overflow:auto;-webkit-overflow-scrolling:touch}
+#lightbox.open{display:block}
+#lightbox img{display:block;background:#fff;max-width:none;width:max(100%,1100px);margin:56px auto 24px;border-radius:8px}
+#lightbox button{position:fixed;top:12px;right:12px;z-index:51;background:#fff;color:#0f172a;border:none;border-radius:999px;width:40px;height:40px;font-size:20px;cursor:pointer}
+#lightbox .hint{position:fixed;top:20px;left:16px;color:#cbd5e1;font-size:13px}
+/* back to top */
+#toTop{position:fixed;right:16px;bottom:20px;z-index:25;width:46px;height:46px;border-radius:50%;color:var(--ink);cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s;display:grid;place-items:center}
+#toTop.show{opacity:1;pointer-events:auto}
+footer{padding:40px 0;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+
+/* grid/flex children may shrink below their content width (no sideways scroll on phones) */
+.hero .wrap>*,.grid>*,.support>*,.g2>*{min-width:0}
+.lead code{white-space:normal}
+.cand,.out{overflow-wrap:anywhere}
+@media (max-width:1100px){ .navlinks .lbl-x{display:none} }
+@media (max-width:900px){
+  .hero .wrap,.support{grid-template-columns:1fr}
+  .g4{grid-template-columns:repeat(2,1fr)}
+  .g3,.stats{grid-template-columns:repeat(2,1fr)}
+  .navlinks{display:none}
+  #theme{margin-left:auto}
+  nav .wrap{height:54px}
+  #dock{display:flex;position:fixed;top:auto;height:auto;left:50%;transform:translateX(-50%);bottom:max(12px,env(safe-area-inset-bottom));z-index:40;
+        width:min(440px,calc(100% - 24px));border-radius:22px;padding:6px;justify-content:space-between}
+  #dock a,#dock button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 2px;border-radius:15px;
+        color:var(--ink2);font:600 11px/1.1 Inter,sans-serif;background:none;border:none;cursor:pointer;text-decoration:none}
+  #dock .ic{width:22px;height:22px}
+  #dock a.active,#dock button.on{color:var(--blue);background:color-mix(in srgb,var(--blue) 13%,transparent)}
+  #toTop{bottom:96px}
+  body{padding-bottom:96px}
+}
+@media (max-width:560px){
+  .g4,.g3,.g2{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr);gap:4px}
+  .stat{padding:14px 4px}
+  .stat b{font-size:28px}
+  .hero{padding:36px 0 32px}
+  h1{margin-top:12px}
+  .lead{font-size:17px}
+  section{padding:48px 0}
+  .sub{font-size:16px;margin-bottom:24px}
+  .card{padding:18px}
+  .step{padding-left:18px}
+  .step::before{position:static;display:inline-grid;margin-bottom:4px;width:32px;height:32px}
+  table.ex td{padding:9px 6px}
+  table.ex td:first-child{width:44%;font-size:13px}
+  table.ex td:last-child{font-size:17px}
+  .acct{font-size:24px}
+  .cta{flex-wrap:nowrap;gap:10px}
+  .cta .btn{flex:1;justify-content:center;white-space:nowrap;padding:12px 10px;font-size:15px}
+  footer .wrap{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+<!-- icons: Lucide (ISC) and Simple Icons (CC0), the same sets react-icons uses -->
+<symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></symbol>
+<symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></symbol>
+<symbol id="i-cpu" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2" /> <rect width="6" height="6" x="9" y="9" rx="1" /> <path d="M15 2v2" /> <path d="M15 20v2" /> <path d="M2 15h2" /> <path d="M2 9h2" /> <path d="M20 15h2" /> <path d="M20 9h2" /> <path d="M9 2v2" /> <path d="M9 20v2" /></symbol>
+<symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /> <polyline points="7 10 12 15 17 10" /> <line x1="12" x2="12" y1="15" y2="3" /></symbol>
+<symbol id="i-ellipsis" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1" /> <circle cx="19" cy="12" r="1" /> <circle cx="5" cy="12" r="1" /></symbol>
+<symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /> <path d="M10 14 21 3" /> <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol>
+<symbol id="i-gauge" viewBox="0 0 24 24"><path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" /></symbol>
+<symbol id="i-house" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /> <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></symbol>
+<symbol id="i-keyboard" viewBox="0 0 24 24"><path d="M10 8h.01" /> <path d="M12 12h.01" /> <path d="M14 8h.01" /> <path d="M16 12h.01" /> <path d="M18 8h.01" /> <path d="M6 8h.01" /> <path d="M7 16h10" /> <path d="M8 12h.01" /> <rect width="20" height="16" x="2" y="4" rx="2" /></symbol>
+<symbol id="i-languages" viewBox="0 0 24 24"><path d="m5 8 6 6" /> <path d="m4 14 6-6 2-3" /> <path d="M2 5h12" /> <path d="M7 2h1" /> <path d="m22 22-5-10-5 10" /> <path d="M14 18h6" /></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /> <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /> <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="12" y2="12" /> <line x1="4" x2="20" y1="6" y2="6" /> <line x1="4" x2="20" y1="18" y2="18" /></symbol>
+<symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2" /> <line x1="8" x2="16" y1="21" y2="21" /> <line x1="12" x2="12" y1="17" y2="21" /></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3" /></symbol>
+<symbol id="i-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></symbol>
+<symbol id="i-sun-moon" viewBox="0 0 24 24"><path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4" /> <path d="M12 2v2" /> <path d="M12 20v2" /> <path d="m4.9 4.9 1.4 1.4" /> <path d="m17.7 17.7 1.4 1.4" /> <path d="M2 12h2" /> <path d="M20 12h2" /> <path d="m6.3 17.7-1.4 1.4" /> <path d="m19.1 4.9-1.4 1.4" /></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /> <path d="m6 6 12 12" /></symbol>
+<symbol id="b-android" viewBox="0 0 24 24"><path d="M18.4395 5.5586c-.675 1.1664-1.352 2.3318-2.0274 3.498-.0366-.0155-.0742-.0286-.1113-.043-1.8249-.6957-3.484-.8-4.42-.787-1.8551.0185-3.3544.4643-4.2597.8203-.084-.1494-1.7526-3.021-2.0215-3.4864a1.1451 1.1451 0 0 0-.1406-.1914c-.3312-.364-.9054-.4859-1.379-.203-.475.282-.7136.9361-.3886 1.5019 1.9466 3.3696-.0966-.2158 1.9473 3.3593.0172.031-.4946.2642-1.3926 1.0177C2.8987 12.176.452 14.772 0 18.9902h24c-.119-1.1108-.3686-2.099-.7461-3.0683-.7438-1.9118-1.8435-3.2928-2.7402-4.1836a12.1048 12.1048 0 0 0-2.1309-1.6875c.6594-1.122 1.312-2.2559 1.9649-3.3848.2077-.3615.1886-.7956-.0079-1.1191a1.1001 1.1001 0 0 0-.8515-.5332c-.5225-.0536-.9392.3128-1.0488.5449zm-.0391 8.461c.3944.5926.324 1.3306-.1563 1.6503-.4799.3197-1.188.0985-1.582-.4941-.3944-.5927-.324-1.3307.1563-1.6504.4727-.315 1.1812-.1086 1.582.4941zM7.207 13.5273c.4803.3197.5506 1.0577.1563 1.6504-.394.5926-1.1038.8138-1.584.4941-.48-.3197-.5503-1.0577-.1563-1.6504.4008-.6021 1.1087-.8106 1.584-.4941z"/></symbol>
+<symbol id="b-apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+<symbol id="b-github" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+<symbol id="b-huggingface" viewBox="0 0 24 24"><path d="M1.4446 11.5059c0 1.1021.1673 2.1585.4847 3.1563-.0378-.0028-.0691-.0058-.1058-.0058-.4209 0-.8015.16-1.0704.4512-.3454.3737-.4984.8335-.4316 1.293a1.576 1.576 0 0 0 .2148.5978c-.2319.1864-.4018.4456-.4844.7578-.0646.2448-.131.7543.2149 1.2794a1.4552 1.4552 0 0 0-.0625.1055c-.208.3923-.2207.8372-.0371 1.25.2783.6258.9696 1.1175 2.3126 1.6467.8356.3292 1.5988.5411 1.6056.543 1.1046.2847 2.104.4277 2.969.4277 1.4173 0 2.4754-.3849 3.1525-1.1446 1.538.2651 2.791.1403 3.592.006.6773.7555 1.7332 1.1387 3.1467 1.1387.8649 0 1.8643-.143 2.969-.4278.0068-.0019.77-.2138 1.6056-.543 1.343-.5292 2.0343-1.0208 2.3126-1.6466.1836-.4129.171-.8577-.037-1.25a1.4685 1.4685 0 0 0-.0626-.1056c.346-.525.2795-1.0346.2149-1.2793-.0826-.3122-.2525-.5714-.4844-.7579.11-.1816.1831-.3788.2148-.5977.0669-.4595-.0862-.9193-.4316-1.293-.2688-.2913-.6495-.4513-1.0704-.4513-.0209 0-.0376.0008-.0588.0018.3162-.9966.4846-2.0518.4846-3.1523 0-5.807-4.7362-10.5144-10.5789-10.5144-5.8426 0-10.5788 4.7073-10.5788 10.5144Zm10.5788-9.4831c5.2727 0 9.5476 4.246 9.5476 9.483a9.4201 9.4201 0 0 1-.2696 2.2365c-.0039-.0047-.0079-.011-.0117-.0156-.274-.3255-.6679-.5059-1.1075-.5059-.352 0-.714.1155-1.0763.3438-.2403.1517-.5058.422-.7793.7598-.2534-.3492-.608-.5832-1.0137-.6465a1.5174 1.5174 0 0 0-.2344-.0176c-.9263 0-1.4828.7993-1.6935 1.5177-.1046.2426-.6065 1.3482-1.3614 2.0978-1.1681 1.1601-1.4458 2.3534-.8396 3.6382-.843.1029-1.5836.0927-2.365-.006.5906-1.212.3626-2.4388-.8426-3.6322-.755-.7496-1.2568-1.8552-1.3614-2.0978-.2107-.7184-.7673-1.5177-1.6935-1.5177-.078 0-.1568.0054-.2344.0176-.4057.0633-.7604.2973-1.0137.6465-.2735-.3379-.539-.6081-.7794-.7598-.3622-.2283-.7243-.3438-1.0762-.3438-.4266 0-.8094.171-1.0821.4786a9.4208 9.4208 0 0 1-.2598-2.1936c0-5.237 4.2749-9.483 9.5475-9.483zM8.6443 7.0036c-.4838.0043-.9503.2667-1.1934.7227-.3536.6633-.1006 1.4873.5645 1.84.351.1862.4883-.5261.836-.6485.3107-.1095.841.399 1.0078.086.3536-.6634.1025-1.4874-.5625-1.84a1.3659 1.3659 0 0 0-.6524-.1602Zm6.8403 0c-.2199-.002-.4426.05-.6504.1602-.665.3526-.9181 1.1766-.5645 1.84.1669.313.6971-.1955 1.0079-.086.3476.1224.4867.8347.838.6485.6649-.3527.916-1.1767.5624-1.84-.243-.456-.7096-.7184-1.1934-.7227Zm-9.7565 1.418a.8768.8768 0 0 0-.877.877c0 .4846.3925.877.877.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zm12.6434 0c-.4845 0-.879.3925-.879.877 0 .4846.3945.877.879.877a.8768.8768 0 0 0 .877-.877.8768.8768 0 0 0-.877-.877zM8.7927 11.459c-.179-.003-.2793.1107-.2793.416 0 .8097.3874 2.125 1.4279 2.924.207-.7123 1.3453-1.2832 1.5079-1.2012.2315.1167.2191.4417.6074.7266.3884-.285.374-.6098.6056-.7266.1627-.082 1.3009.4889 1.5079 1.2012 1.0404-.799 1.4278-2.1144 1.4278-2.924 0-1.2212-1.583.6402-3.5413.6485-1.4686-.0061-2.7266-1.0558-3.2639-1.0645zM4.312 14.4768c.5792.365 1.6964 2.2751 2.1056 3.0177.1371.2488.371.3536.582.3536.4188 0 .7465-.4138.0391-.9395-1.0636-.791-.6914-2.0846-.1836-2.1642a.4302.4302 0 0 1 .0664-.004c.4616 0 .666.7892.666.7892s.5959 1.4898 1.6213 2.508c.942.9356 1.062 1.703.4961 2.6661-.0164-.004-.0159.0236-.1484.2149-.1853.2673-.4322.4688-.7188.6152-.5062.2269-1.1397.2696-1.7833.2696-1.037 0-2.1017-.1824-2.6975-.336-.0293-.0075-3.6505-.9567-3.1916-1.8224.0771-.1454.2033-.2031.3633-.2031.6463 0 1.823.9551 2.3283.9551.113 0 .196-.0865.2285-.2031.2249-.8045-3.2787-1.0522-2.9846-2.1642.0519-.1967.193-.2757.3907-.2754.854 0 2.7704 1.4923 3.172 1.4923.0307 0 .0525-.0085.0645-.0274.2012-.3227.1096-.5865-1.3087-1.4395-1.4182-.8533-2.4315-1.329-1.8653-1.9416.0651-.0707.1574-.1015.2695-.1015.8611.0002 2.8948 1.84 2.8948 1.84s.5487.5683.8809.5683c.0762 0 .1416-.0315.1855-.1054.2355-.3946-2.1858-2.2183-2.3224-2.971-.0926-.51.0641-.7676.3555-.7676-.0006.008.1701-.0285.4942.1759zm16.2257.5918c-.1366.7526-2.5579 2.5764-2.3224 2.9709.044.074.1092.1055.1855.1055.3321 0 .881-.5684.881-.5684s2.0336-1.8397 2.8947-1.84c.1121 0 .2044.0308.2695.1016.5662.6125-.447 1.0882-1.8653 1.9415-1.4183.853-1.51 1.1168-1.3087 1.4396.012.0188.0337.0273.0644.0273.4016 0 2.3181-1.4923 3.1721-1.4923.1977-.0002.3388.0787.3907.2754.294 1.112-3.2095 1.3597-2.9846 2.1642.0325.1166.1156.2032.2285.2032.5054 0 1.682-.9552 2.3283-.9552.16 0 .2862.0577.3633.2032.459.8656-3.1623 1.8149-3.1916 1.8224-.5958.1535-1.6605.336-2.6975.336-.6351 0-1.261-.0409-1.7638-.2599-.2949-.1472-.5488-.3516-.7383-.625-.0411-.0682-.1026-.1476-.1426-.205-.5726-.9679-.455-1.7371.4903-2.676 1.0254-1.0182 1.6212-2.508 1.6212-2.508s.2044-.7891.666-.7891a.4318.4318 0 0 1 .0665.0039c.5078.0796.88 1.3732-.1836 2.1642-.7074.5257-.3797.9395.039.9395.211 0 .445-.1047.5821-.3535.4092-.7426 1.5264-2.6527 2.1056-3.0178.5588-.3524.99-.1816.8497.5918z"/></symbol>
+<symbol id="b-windows" viewBox="0 0 24 24"><path d="M3 5.1l7.4-1v7.2H3V5.1zm0 13.8l7.4 1v-7.1H3v6.1zm8.2 1.1L21 21.4v-8.6h-9.8V20zm0-15.9v7.2H21V2.6l-9.8 1.4z"/></symbol>
+</svg>
+
+<nav>
+  <div class="wrap glass">
+    <a class="brand" href="#top"><img src="assets/logo.png" alt="">Akkhara <span class="km" style="font-weight:600;color:var(--muted);font-size:16px">អក្ខរៈ</span></a>
+    <div class="navlinks">
+      <a href="#top"><svg class="ic" aria-hidden="true"><use href="#i-house"/></svg><span>Home</span></a>
+      <a href="#download"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg><span>Download</span></a>
+      <a href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg><span>Demo</span></a>
+      <a href="https://huggingface.co/INGMUYLEANG/akkhara-mini" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-huggingface"/></svg><span class="lbl-x">Model</span></a>
+      <a href="#docs"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg><span>Docs</span></a>
+      <a href="#windows"><svg class="ic ib" aria-hidden="true"><use href="#b-windows"/></svg><span class="lbl-x">Windows</span></a>
+      <a href="#mac"><svg class="ic ib" aria-hidden="true"><use href="#b-apple"/></svg><span class="lbl-x">Mac</span></a>
+      <a href="#numbers"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg><span class="lbl-x">Accuracy</span></a>
+      <a href="#support"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg><span>Support</span></a>
+    </div>
+    <button id="theme" class="iconbtn" title="Light / dark" aria-label="Switch light or dark mode"><svg class="ic" aria-hidden="true"><use href="#i-sun-moon"/></svg></button>
+  </div>
+</nav>
+
+<div id="mobileMenu" class="glass" role="menu">
+  <div class="grp">On this page</div>
+  <a href="#top"><svg class="ic" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+  <a href="#download"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Download<small>Android · Windows · Mac</small></a>
+  <a href="#how"><svg class="ic" aria-hidden="true"><use href="#i-keyboard"/></svg>How it works</a>
+  <a href="#name"><svg class="ic" aria-hidden="true"><use href="#i-languages"/></svg>The name <span class="km">អក្ខរៈ</span></a>
+  <a href="#docs"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg>Docs: the model</a>
+  <a href="#numbers"><svg class="ic" aria-hidden="true"><use href="#i-gauge"/></svg>Accuracy</a>
+  <a href="#windows"><svg class="ic ib" aria-hidden="true"><use href="#b-windows"/></svg>Windows install guide</a>
+  <a href="#mac"><svg class="ic ib" aria-hidden="true"><use href="#b-apple"/></svg>Mac install guide</a>
+  <a href="#open"><svg class="ic" aria-hidden="true"><use href="#i-layers"/></svg>Open source</a>
+  <a href="#support"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg>Support Akkhara</a>
+  <div class="grp">Online</div>
+  <a href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Try the web demo<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
+  <a href="https://huggingface.co/INGMUYLEANG/akkhara-mini" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-huggingface"/></svg>Model on Hugging Face<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
+  <a href="https://github.com/MuyleangIng/akkhara-keyboard/releases/latest" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-android"/></svg>Android APK<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
+  <a href="https://github.com/MuyleangIng/akkhara-desktop/releases/latest" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-windows"/></svg>Windows &amp; Mac<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
+  <a href="https://github.com/MuyleangIng" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-github"/></svg>GitHub<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
+</div>
+
+<nav id="dock" class="glass" aria-label="Quick links">
+  <a href="#top" data-sec="top"><svg class="ic" aria-hidden="true"><use href="#i-house"/></svg>Home</a>
+  <a href="#download" data-sec="download"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Download</a>
+  <a href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Demo</a>
+  <a href="https://huggingface.co/INGMUYLEANG/akkhara-mini" target="_blank" rel="noopener"><svg class="ic ib" aria-hidden="true"><use href="#b-huggingface"/></svg>Model</a>
+  <button id="menuBtn2" aria-label="More" aria-expanded="false"><svg class="ic" aria-hidden="true"><use href="#i-ellipsis"/></svg>More</button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <span class="pill">● Offline AI keyboard · Free</span>
+      <h1>Type Sing Khmer.<br>Get <span class="km">ខ្មែរ</span>.</h1>
+      <p class="lead">Akkhara reads the way you already chat (<code>nh jg tv sala rean</code>) and writes correct Khmer script:
+        <span class="km">ខ្ញុំចង់ទៅសាលារៀន</span>. On your phone and your computer, without internet.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#download"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg>Download free</a>
+        <a class="btn btn-ghost" href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Try the demo</a>
+      </div>
+      <div class="trust">
+        <span><b>Android</b> · <b>Windows</b> · <b>Mac</b> · iOS soon</span>
+        <span>🔒 Nothing you type leaves your device</span>
+      </div>
+    </div>
+
+    <div class="demo" aria-label="Live demo">
+      <div class="demo-top"><i></i><i></i><i></i></div>
+      <div class="demo-label">You type</div>
+      <div class="typed"><u id="typed"></u><span class="caret"></span></div>
+      <div class="demo-label" style="margin-bottom:8px">Akkhara suggests</div>
+      <div class="cands km" id="cands"></div>
+      <div class="demo-label" style="margin-top:16px">Inserted</div>
+      <div class="out km" id="out"></div>
+      <div class="hint">Enter inserts the highlighted one · real model outputs</div>
+    </div>
+  </div>
+</header>
+
+<section id="download">
+  <div class="wrap">
+    <div class="eyebrow">Download</div>
+    <h2>One keyboard, every screen</h2>
+    <p class="sub">All versions use the same AI model, built into the app. Free and open source.</p>
+    <div class="grid g4">
+      <div class="card platform">
+        <div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-android"/></svg></div>
+        <h3>Android <span class="status st-ok">Available</span></h3>
+        <p>A full keyboard: Sing Khmer, ខ្មែរ (NiDA) and English, emoji, clipboard, dictionary.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-sm" id="dl-apk" href="https://github.com/MuyleangIng/akkhara-keyboard/releases/latest">Download APK</a>
+          <span class="meta" id="meta-apk">Android 8.0+ · ~50 MB</span>
+        </div>
+      </div>
+      <div class="card platform">
+        <div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-windows"/></svg></div>
+        <h3>Windows <span class="status st-ok">New</span></h3>
+        <p>A real keyboard next to English. <kbd>Win</kbd> + <kbd>Space</kbd> → Akkhara, type in any app.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-sm" id="dl-win" href="https://github.com/MuyleangIng/akkhara-desktop/releases">Download Setup.exe</a>
+          <span class="meta" id="meta-win">Windows 10 / 11 · Intel/AMD · ~23 MB</span>
+        </div>
+      </div>
+      <div class="card platform">
+        <div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-apple"/></svg></div>
+        <h3>Mac <span class="status st-ok">New</span></h3>
+        <p>A real keyboard in Input Sources. <kbd>Ctrl</kbd> + <kbd>Space</kbd> → Akkhara, type in any app.</p>
+        <div class="actions">
+          <a class="btn btn-primary btn-sm" href="#mac">Install (one line)</a>
+          <a class="btn btn-ghost btn-sm" id="dl-mac" href="https://github.com/MuyleangIng/akkhara-desktop/releases">.zip</a>
+          <span class="meta" id="meta-mac">macOS 13.3+ · Apple M-series · ~23 MB</span>
+        </div>
+      </div>
+      <div class="card platform">
+        <div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-smartphone"/></svg></div>
+        <h3>iPhone <span class="status st-soon">Soon</span></h3>
+        <p>The iOS keyboard needs an Apple Developer account to reach the App Store. <a href="#support">Help make it happen →</a></p>
+        <div class="actions">
+          <a class="btn btn-ghost btn-sm" href="#support">Support iOS</a>
+          <span class="meta">App Store · after funding</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Chat the way you always do</h2>
+    <p class="sub">Sing Khmer has no standard spelling: <code>knhom</code>, <code>knh</code> and <code>nh</code> all mean <span class="km">ខ្ញុំ</span>. Akkhara reads the whole sentence, so short words get the right meaning from their neighbours.</p>
+    <div class="grid g2" style="align-items:center">
+      <div class="steps">
+        <div class="card step"><h3>Type Latin letters</h3><p>Your Latin stays underlined. Nothing changes until you choose.</p></div>
+        <div class="card step" style="margin-top:14px"><h3>The AI writes Khmer</h3><p>A small model (18 MB) on your device writes the Khmer letter by letter and keeps the 5 best sentences, in about 10 ms.</p></div>
+        <div class="card step" style="margin-top:14px"><h3>Pick and keep typing</h3><p>Enter or tap inserts it. English words like <code>bro</code> or <code>game</code> stay English; names can be kept as typed.</p></div>
+      </div>
+      <div class="card">
+        <table class="ex">
+          <tr><td>nh jg tv sala rean</td><td class="km">ខ្ញុំចង់ទៅសាលារៀន</td></tr>
+          <tr><td>b pg lvol ot torn tomne te o</td><td class="km">បងកំពុងរវល់អត់ទាន់ទំនេរទេអូន</td></tr>
+          <tr><td>sok sbay ot bro</td><td class="km">សុខសប្បាយអត់ bro</td></tr>
+          <tr><td>tos jol CG</td><td class="km">តោះចូល CG</td></tr>
+          <tr><td>b <b>ng</b> o</td><td class="km">បង<b>និង</b>អូន</td></tr>
+          <tr><td>nh <b>ng</b> tv</td><td class="km">ខ្ញុំ<b>នឹង</b>ទៅ</td></tr>
+          <tr><td>nv <b>ng</b></td><td class="km">នៅ<b>ហ្នឹង</b></td></tr>
+        </table>
+        <p class="meta" style="margin:12px 0 0">Real outputs of akkhara-mini. The last three: the same <code>ng</code>, three meanings, chosen from context.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="name" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">The name</div>
+    <div class="grid g2" style="align-items:center">
+      <div>
+        <h2><span class="km">អក្ខរៈ</span> · Akkhara</h2>
+        <p class="sub" style="margin-bottom:14px"><b>Akkhara</b> comes from the Pali word <i>akkhara</i>: a <b>letter</b>, the written sign of a sound.
+          In Khmer it lives on in words about writing: <span class="km">អក្ខរាវិរុទ្ធ</span> (correct spelling) and
+          <span class="km">អក្ខរកម្ម</span> (literacy).</p>
+        <p class="sub">That is the whole idea: you type the sounds with Latin letters, Akkhara gives them back in
+          <span class="km">អក្សរខ្មែរ</span>, Khmer script, spelled correctly.</p>
+      </div>
+      <div class="card" style="text-align:center;padding:34px 22px">
+        <img src="assets/logo.png" alt="Akkhara logo" width="96" height="96" style="border-radius:22px">
+        <div class="km" style="font-size:44px;font-weight:700;margin-top:12px;line-height:1.3">អក្ខរៈ</div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:.02em">Akkhara</div>
+        <div class="meta" style="margin-top:6px">letter · script · made by Ing Muyleang</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="docs">
+  <div class="wrap">
+    <div class="eyebrow">Docs</div>
+    <h2>How the model works</h2>
+    <p class="sub">Akkhara is a small AI model that translates <b>Sing Khmer</b> (Khmer written with Latin letters, as in chat) into <b>Khmer script</b>, one whole sentence at a time.</p>
+    <a class="zoom" href="assets/architecture.png" data-alt="akkhara-mini: training, the character-level T5 model, ONNX export and the phone keyboard"><img class="figure" src="assets/architecture.png" alt="akkhara-mini: training, the character-level T5 model, ONNX export and the phone keyboard" loading="lazy"></a>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><h3>1 · The data</h3><p>398,000 pairs of Sing Khmer → Khmer. Khmer sentences from Wikipedia and the web, romanized the many ways people really type (<code>knhom</code> / <code>knh</code> / <code>nh</code>), plus real chat checked by native speakers, 846 topic spellings, 134 Cambodian ministry, bank and university names, and common English chat words kept as English.</p></div>
+      <div class="card"><h3>2 · The model</h3><p><b>akkhara-mini</b>: a character-level T5 encoder–decoder with 18 million parameters (6 + 3 layers). The encoder reads every Latin letter of the sentence; the decoder writes the Khmer one letter at a time and a beam search keeps the 5 best sentences.</p></div>
+      <div class="card"><h3>3 · On your device</h3><p>Exported to <b>ONNX</b> and shrunk to 8-bit (18.5 MB). It runs inside the keyboard with ONNX Runtime on Android, Windows and Mac: about 10 ms per key, no internet. Long text is cut into 6-word pieces and finished pieces are cached.</p></div>
+      <div class="card"><h3>Context</h3><p>Short chat words have several meanings. <code>ng</code> is <span class="km">និង</span>, <span class="km">នឹង</span> or <span class="km">ហ្នឹង</span>; <code>yt</code> is YouTube or <span class="km">យឺត</span>. Because the model reads the whole sentence, it picks the right one (80 of 86 context tests).</p></div>
+      <div class="card"><h3>Abbreviations</h3><p><code>mptc</code>, <code>rupp</code>, <code>cadt</code>, <code>istad</code>, <code>aba</code> stay as typed at #1, and the full Khmer name is offered at #2: <span class="km">ក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍</span>.</p></div>
+      <div class="card"><h3>A bigger model too</h3><p><b>akkhara-byt5-small</b> (300M parameters) is the most accurate on formal text (CER 3.7%). It runs in the <a href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener">web demo</a>; the phone and PC use the small one.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="numbers" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Accuracy</div>
+    <h2>Measured on real chat</h2>
+    <p class="sub">Tested on sentences typed and checked by native speakers, and on 7,800 held-out sentences.</p>
+    <div class="card"><div class="stats">
+      <div class="stat"><b>85%</b><span>real chat, right at #1</span></div>
+      <div class="stat"><b>92%</b><span>right answer in the top-5</span></div>
+      <div class="stat"><b>49/52</b><span>ministry, bank &amp; university names</span></div>
+      <div class="stat"><b>~10 ms</b><span>per key on a phone, offline</span></div>
+    </div></div>
+    <a class="zoom" href="assets/benchmark.png" data-alt="Benchmark of the Akkhara models on the same tests"><img class="figure" style="margin-top:22px" src="assets/benchmark.png" alt="Benchmark of the Akkhara models on the same tests" loading="lazy"></a>
+  </div>
+</section>
+
+<section id="windows">
+  <div class="wrap">
+    <div class="eyebrow">Docs · Windows</div>
+    <h2>Install, update, uninstall: never a restart</h2>
+    <p class="sub">Setup adds Akkhara to your keyboards. Choose the folder or keep the default.</p>
+    <a class="zoom" href="assets/win-0-setup.svg" data-alt="Setup steps: welcome, choose folder, add to keyboards, how to type"><img class="figure" src="assets/win-0-setup.svg" alt="Setup steps: welcome, choose folder, add to keyboards, how to type" loading="lazy"></a>
+    <a class="zoom" href="assets/win-4-switch-and-type.svg" data-alt="Win + Space to switch, then type Sing Khmer"><img class="figure" style="margin-top:18px" src="assets/win-4-switch-and-type.svg" alt="Win + Space to switch, then type Sing Khmer" loading="lazy"></a>
+    <a class="zoom" href="assets/win-lifecycle.svg" data-alt="Install, use, update, uninstall, install again: no restart"><img class="figure" style="margin-top:18px" src="assets/win-lifecycle.svg" alt="Install, use, update, uninstall, install again: no restart" loading="lazy"></a>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><h3>Update</h3><p>Start menu → Akkhara → <b>Check for updates</b>, or the weekly check if you ticked it in Setup. It compares your version with the newest GitHub release and installs it over the old one. Or simply run a newer Setup.exe. Only this check goes online; the keyboard itself never does.</p></div>
+      <div class="card"><h3>Uninstall</h3><p>Settings → Apps → Installed apps → <b>Akkhara Keyboard</b> → Uninstall. Akkhara is removed from your keyboard list, unregistered, and its folder and update check are deleted.</p></div>
+      <div class="card"><h3>Why no restart?</h3><p>Open apps keep the keyboard file loaded, so Windows cannot delete it at once. Setup <b>moves</b> such files to Windows' Temp folder (allowed even while in use); Windows deletes them at your next normal restart. You can <b>install again</b> any time.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="mac" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Docs · Mac</div>
+    <h2>Mac keyboard: one line to install</h2>
+    <p class="sub">Apple M-series Mac, macOS 13.3 or newer. Open <b>Terminal</b> (<kbd>⌘</kbd> + <kbd>Space</kbd> → "Terminal") and paste:</p>
+    <div class="cmd"><code id="maccmd">curl -fsSL https://raw.githubusercontent.com/MuyleangIng/akkhara-desktop/main/mac-ime/get.sh | bash</code><button class="btn btn-sm btn-primary" id="copymac">Copy</button></div>
+    <a class="zoom" href="assets/mac-1-install-and-type.svg" data-alt="Install with one line, choose Akkhara in the menu bar, type in any app"><img class="figure" style="margin-top:18px" src="assets/mac-1-install-and-type.svg" alt="Install with one line, choose Akkhara in the menu bar, type in any app" loading="lazy"></a>
+    <div class="grid g3" style="margin-top:22px">
+      <div class="card"><h3>Switch and type</h3><p>Menu bar input menu → <b>Akkhara</b> (icon អ), or <kbd>Ctrl</kbd> + <kbd>Space</kbd>. Type <code>nh jg tv sala rean</code>: <kbd>Enter</kbd> inserts, <kbd>↑</kbd> <kbd>↓</kbd> choose, <kbd>Esc</kbd> keeps the Latin. Not in the menu? System Settings → Keyboard → Input Sources → Edit… → + → Khmer → Akkhara.</p></div>
+      <div class="card"><h3>Update, uninstall</h3><p><b>Update:</b> run the same line again; it always takes the newest release. <b>Uninstall:</b> the same line with <code>| bash -s uninstall</code> at the end. No admin password, no restart, nothing left behind.</p></div>
+      <div class="card"><h3>Why Terminal?</h3><p>The app is not signed by Apple yet (that needs the paid Apple Developer account), so macOS blocks a zip opened from the browser. Files downloaded by Terminal are not blocked. Prefer the zip? Unzip it and run <code>bash install.sh</code> inside.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="open">
+  <div class="wrap">
+    <div class="eyebrow">Open source</div>
+    <h2>Open models, open code</h2>
+    <p class="sub">Use the models in your own apps, read the code, or help with real Sing Khmer spellings.</p>
+    <div class="grid g3">
+      <a class="card" href="https://huggingface.co/INGMUYLEANG/akkhara-mini" target="_blank" rel="noopener"><div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-huggingface"/></svg></div><h3>akkhara-mini</h3><p>18M parameters, ONNX int8, runs on phones and laptops. Apache-2.0.</p></a>
+      <a class="card" href="https://huggingface.co/INGMUYLEANG/akkhara-byt5-small" target="_blank" rel="noopener"><div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-huggingface"/></svg></div><h3>akkhara-byt5-small</h3><p>300M parameters, the most accurate on formal text. Apache-2.0.</p></a>
+      <a class="card" href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></div><h3>Web demo</h3><p>Try both models in your browser, no install.</p></a>
+      <a class="card" href="https://github.com/MuyleangIng/akkhara-keyboard" target="_blank" rel="noopener"><div class="icon"><svg class="ic ib" aria-hidden="true"><use href="#b-android"/></svg></div><h3>Android keyboard</h3><p>Kotlin + ONNX Runtime source code.</p></a>
+      <a class="card" href="https://github.com/MuyleangIng/akkhara-desktop" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></div><h3>Windows &amp; Mac</h3><p>Windows keyboard (TSF, C++), Mac keyboard (InputMethodKit, Swift) and the desktop app.</p></a>
+      <a class="card" href="https://huggingface.co/datasets/INGMUYLEANG/akkhara-sing-khmer" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-database"/></svg></div><h3>Dataset</h3><p>380k Sing Khmer → Khmer pairs (access on request).</p></a>
+    </div>
+  </div>
+</section>
+
+<section id="support" class="alt">
+  <div class="wrap">
+    <div class="eyebrow">Support Akkhara</div>
+    <h2>Help bring Akkhara to iPhone and the app stores</h2>
+    <p class="sub">Akkhara is free and made by one person. Publishing on the stores costs money every year; your support pays for it.</p>
+    <div class="support">
+      <div class="card">
+        <div class="goal"><div><b>iPhone keyboard on the App Store</b><small>Apple Developer Program, every year</small></div><div class="price">$99 / year</div></div>
+        <div class="goal"><div><b>Android on Google Play</b><small>Google Play developer account, one time</small></div><div class="price">$25</div></div>
+        <div class="goal"><div><b>Signed Windows installer</b><small>no more "Windows protected your PC" warning</small></div><div class="price">later</div></div>
+        <p class="meta" style="margin:14px 0 0">Every donation goes to these accounts first. Thank you 🙏</p>
+      </div>
+      <div class="bank">
+        <div class="label">Donate with ABA Bank</div>
+        <div class="acct" id="acct">008 072 001</div>
+        <div>Account name: <b>ING MUYLEANG</b></div>
+        <button class="btn btn-sm copy" id="copy">Copy account number</button>
+        <small>Open ABA Mobile → Transfer → ABA account → paste the number. Any amount helps.</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Ing Muyleang · Code and models Apache-2.0</div>
+    <div><a href="https://github.com/MuyleangIng">GitHub</a> · <a href="https://huggingface.co/INGMUYLEANG">Hugging Face</a> · <a href="https://github.com/MuyleangIng/akkhara-desktop/issues">Report a problem</a></div>
+  </div>
+</footer>
+
+<div id="lightbox" aria-hidden="true"><span class="hint">Swipe / scroll to look around</span><button aria-label="Close">✕</button><img alt=""></div>
+<button id="toTop" class="glass" aria-label="Back to top"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
+
+<script>
+// ---- phone menu, zoomable pictures, back to top, active link ---------------------------------
+(function(){
+  const btn=document.getElementById('menuBtn2'), menu=document.getElementById('mobileMenu');
+  const close=()=>{menu.classList.remove('open'); btn.classList.remove('on'); btn.setAttribute('aria-expanded','false');};
+  btn.onclick=e=>{e.stopPropagation(); const o=menu.classList.toggle('open'); btn.classList.toggle('on',o); btn.setAttribute('aria-expanded',o);};
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',close));
+  document.addEventListener('click',e=>{if(menu.classList.contains('open') && !menu.contains(e.target)) close();});
+  addEventListener('resize',()=>{if(innerWidth>900) close();});
+
+  const lb=document.getElementById('lightbox'), lbImg=lb.querySelector('img');
+  document.querySelectorAll('a.zoom').forEach(a=>a.addEventListener('click',e=>{
+    e.preventDefault(); lbImg.src=a.getAttribute('href'); lbImg.alt=a.dataset.alt||'';
+    lb.classList.add('open'); lb.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }));
+  const shut=()=>{lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); document.body.style.overflow='';};
+  lb.querySelector('button').onclick=shut;
+  lb.addEventListener('click',e=>{if(e.target===lb) shut();});
+  addEventListener('keydown',e=>{if(e.key==='Escape') shut();});
+
+  const top=document.getElementById('toTop');
+  top.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+  const links=[...document.querySelectorAll('.navlinks a[href^="#"], #dock a[href^="#"]')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  addEventListener('scroll',()=>{
+    top.classList.toggle('show',scrollY>600);
+    let cur=secs[0]; for(const s of secs){ if(s.getBoundingClientRect().top<120) cur=s; }
+    links.forEach(a=>a.classList.toggle('active',document.querySelector(a.getAttribute('href'))===cur));
+  },{passive:true});
+})();
+
+// ---- light / dark (remembered on this device) ----------------------------------------------
+(function(){
+  const root=document.documentElement, key='akkhara-theme';
+  try{const t=localStorage.getItem(key); if(t) root.dataset.theme=t;}catch(e){}
+  document.getElementById('theme').onclick=()=>{
+    const dark=root.dataset.theme? root.dataset.theme==='dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    root.dataset.theme=dark?'light':'dark';
+    try{localStorage.setItem(key,root.dataset.theme);}catch(e){}
+  };
+})();
+
+// ---- live demo: real model outputs ----------------------------------------------------------
+const EXAMPLES=[
+  ["nh jg tv sala rean",["ខ្ញុំចង់ទៅសាលារៀន","ខ្ញុំចង់ធ្វើសាលារៀន","ខ្ញុំចឹងទៅសាលារៀន","ញ៉ាំចង់ទៅសាលារៀន","ខ្ញុំចង់ទៅសាលារាង"]],
+  ["sok sbay ot bro",["សុខសប្បាយអត់ bro","ស្អែកសប្បាយអត់ bro","ស៊ុកសប្បាយអត់ bro","សុខសប្បាយអួត bro","សោកសប្បាយអត់ bro"]],
+  ["tos jol CG",["តោះចូល CG","ទោះចូល CG","តោះចូល cG","តោះចូលCG","តោះចោល CG"]],
+  ["b pg lvol ot torn tomne te o",["បងកំពុងរវល់អត់ទាន់ទំនេរទេអូន","បងកំពុងរវល់អត់ទាន់ទំនេរតែអូន","បងកំពុងរវល់អត់ទាន់ទំនេរតើអូន","បងកំពុងរវល់អត់ទាន់ទំនេរ te អូន","បងកំពុងរវល់អត់ទាន់ទំនេរតេអូន"]]
+];
+const typed=document.getElementById('typed'), cands=document.getElementById('cands'), out=document.getElementById('out');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function show(list,n){
+  cands.innerHTML=list.slice(0,n).map((t,i)=>`<div class="cand${i===0?' sel':''}"><span>${i+1}</span>${t}</div>`).join('');
+}
+async function loop(){
+  const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  for(let k=0;;k=(k+1)%EXAMPLES.length){
+    const [latin,list]=EXAMPLES[k];
+    typed.textContent=''; out.textContent=''; cands.innerHTML='';
+    if(still){typed.textContent=latin; show(list,5); out.textContent=list[0]; return;}
+    for(let i=1;i<=latin.length;i++){
+      typed.textContent=latin.slice(0,i);
+      if(i>4) show(list, Math.min(5, 1+Math.floor(i/4)));
+      await sleep(85);
+    }
+    show(list,5); await sleep(1100);
+    typed.textContent=''; out.textContent=list[0]; await sleep(2600);
+  }
+}
+loop();
+
+// ---- newest downloads from GitHub (pre-releases included) -----------------------------------
+async function newest(repo, match){
+  try{
+    const r=await fetch(`https://api.github.com/repos/${repo}/releases?per_page=10`);
+    if(!r.ok) return null;
+    for(const rel of await r.json()){
+      const a=rel.assets.find(x=>match.test(x.name));
+      if(a) return {url:a.browser_download_url, tag:rel.tag_name, mb:(a.size/1e6).toFixed(0)};
+    }
+  }catch(e){}
+  return null;
+}
+(async()=>{
+  const apk=await newest('MuyleangIng/akkhara-keyboard',/\.apk$/i);
+  if(apk){document.getElementById('dl-apk').href=apk.url; document.getElementById('meta-apk').textContent=`${apk.tag} · Android 8.0+ · ${apk.mb} MB`;}
+  const win=await newest('MuyleangIng/akkhara-desktop',/^Akkhara-Keyboard-Setup.*\.exe$/i);
+  if(win){document.getElementById('dl-win').href=win.url; document.getElementById('meta-win').textContent=`${win.tag} · Windows 10 / 11 · Intel/AMD · ${win.mb} MB`;}
+  const mac=await newest('MuyleangIng/akkhara-desktop',/^Akkhara-Keyboard-Mac.*\.zip$/i);
+  if(mac){document.getElementById('dl-mac').href=mac.url; document.getElementById('meta-mac').textContent=`${mac.tag} · macOS 13.3+ · Apple M-series · ${mac.mb} MB`;}
+})();
+
+// ---- copy the Mac install line
+document.getElementById('copymac').onclick=async(e)=>{
+  try{await navigator.clipboard.writeText(document.getElementById('maccmd').textContent); e.target.textContent='Copied ✓';}
+  catch(_){e.target.textContent='Select + ⌘C';}
+  setTimeout(()=>e.target.textContent='Copy',2000);
+};
+
+// ---- copy the account number ------------------------------------------------------------------
+document.getElementById('copy').onclick=async(e)=>{
+  try{await navigator.clipboard.writeText('008072001'); e.target.textContent='Copied ✓';}
+  catch(_){e.target.textContent='008072001';}
+  setTimeout(()=>e.target.textContent='Copy account number',2000);
+};
+</script>
+</body>
+</html>

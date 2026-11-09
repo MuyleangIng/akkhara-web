@@ -118,6 +118,10 @@ h2{font-size:clamp(28px,3.6vw,40px);line-height:1.15;margin:8px 0 12px;letter-sp
 .platform{display:flex;flex-direction:column}
 .platform .actions{margin-top:auto;display:flex;flex-direction:column;gap:8px}
 .meta{font-size:13px;color:var(--muted)}
+.card.sister{display:flex;gap:18px;align-items:center;margin-top:18px;color:inherit}
+.card.sister:hover{text-decoration:none;border-color:var(--blue)}
+.card.sister img{border-radius:12px;flex:none}
+.card.sister p{margin:0}
 
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
 .stat{text-align:center;padding:22px 10px}
@@ -497,6 +501,11 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <a class="card" href="https://github.com/MuyleangIng/akkhara-desktop" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></div><h3>Windows &amp; Mac</h3><p>Windows keyboard (TSF, C++), Mac keyboard (InputMethodKit, Swift) and the desktop app.</p></a>
       <a class="card" href="https://huggingface.co/datasets/INGMUYLEANG/akkhara-sing-khmer" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-database"/></svg></div><h3>Dataset</h3><p>380k Sing Khmer → Khmer pairs (access on request).</p></a>
     </div>
+    <a class="card sister" href="https://muyleanging.github.io/chakkhu-web/" target="_blank" rel="noopener">
+      <img src="assets/chakkhu.png" alt="" width="52" height="52">
+      <div><span class="status st-soon">Coming soon</span><h3>Chakkhu <span class="km">ចក្ខុ</span>: Khmer OCR</h3>
+      <p>The sister project: Akkhara types the letters, Chakkhu reads them from photos, scans and screenshots. See the plan and the baseline report.</p></div>
+    </a>
   </div>
 </section>
 

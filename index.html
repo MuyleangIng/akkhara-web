@@ -435,7 +435,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
     <div class="eyebrow">Docs</div>
     <h2>How the model works</h2>
     <p class="sub">Akkhara is a small AI model that translates <b>Sing Khmer</b> (Khmer written with Latin letters, as in chat) into <b>Khmer script</b>, one whole sentence at a time.</p>
-    <a class="zoom" href="assets/architecture.png" data-alt="akkhara-mini: training, the character-level T5 model, ONNX export and the phone keyboard"><img class="figure" src="assets/architecture.png" alt="akkhara-mini: training, the character-level T5 model, ONNX export and the phone keyboard" loading="lazy"></a>
+    <a class="zoom" href="assets/architecture.png" data-alt="Figure 1: akkhara-mini, from typed Sing Khmer to Khmer script"><img class="figure" src="assets/architecture.png" alt="Figure 1. akkhara-mini: letter tokens, T5 encoder with 6 layers, decoder with 3 layers writing one Khmer letter per step, beam search and top-5 suggestions" loading="lazy"></a>
     <div class="grid g3" style="margin-top:22px">
       <div class="card"><h3>1 · The data</h3><p>398,000 pairs of Sing Khmer → Khmer. Khmer sentences from Wikipedia and the web, romanized the many ways people really type (<code>knhom</code> / <code>knh</code> / <code>nh</code>), plus real chat checked by native speakers, 846 topic spellings, 134 Cambodian ministry, bank and university names, and common English chat words kept as English.</p></div>
       <div class="card"><h3>2 · The model</h3><p><b>akkhara-mini</b>: a character-level T5 encoder–decoder with 18 million parameters (6 + 3 layers). The encoder reads every Latin letter of the sentence; the decoder writes the Khmer one letter at a time and a beam search keeps the 5 best sentences.</p></div>
@@ -444,6 +444,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <div class="card"><h3>Abbreviations</h3><p><code>mptc</code>, <code>rupp</code>, <code>cadt</code>, <code>istad</code>, <code>aba</code> stay as typed at #1, and the full Khmer name is offered at #2: <span class="km">ក្រសួងប្រៃសណីយ៍និងទូរគមនាគមន៍</span>.</p></div>
       <div class="card"><h3>A bigger model too</h3><p><b>akkhara-byt5-small</b> (300M parameters) is the most accurate on formal text (CER 3.7%). It runs in the <a href="https://huggingface.co/spaces/INGMUYLEANG/akkhara-demo" target="_blank" rel="noopener">web demo</a>; the phone and PC use the small one.</p></div>
     </div>
+    <a class="zoom" href="assets/blocks.png" data-alt="Figure 2: inside akkhara-mini and its big brother"><img class="figure" style="margin-top:22px" src="assets/blocks.png" alt="Figure 2. Inside akkhara-mini: encoder block, decoder block, and akkhara-mini compared with akkhara-byt5-small" loading="lazy"></a>
+    <a class="zoom" href="assets/training-typing.png" data-alt="Figure 3: how Akkhara learns and runs while you type"><img class="figure" style="margin-top:22px" src="assets/training-typing.png" alt="Figure 3. Making 398,849 training pairs with the romanizer, live typing with chunks, cache, re-ranking and rules, and the offline keyboards" loading="lazy"></a>
   </div>
 </section>
 
@@ -506,11 +508,24 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <a class="card" href="https://github.com/MuyleangIng/akkhara-desktop" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></div><h3>Windows &amp; Mac</h3><p>Windows keyboard (TSF, C++), Mac keyboard (InputMethodKit, Swift) and the desktop app.</p></a>
       <a class="card" href="https://huggingface.co/datasets/INGMUYLEANG/akkhara-sing-khmer" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-database"/></svg></div><h3>Dataset</h3><p>380k Sing Khmer → Khmer pairs (access on request).</p></a>
     </div>
-    <a class="card sister" href="https://muyleanging.github.io/chakkhu-web/" target="_blank" rel="noopener">
+    <div class="eyebrow" style="margin-top:30px">Sister projects</div>
+    <div class="grid g3" style="margin-top:6px">
+    <a class="card sister" style="margin-top:0" href="https://muyleanging.github.io/chakkhu-web/" target="_blank" rel="noopener">
       <img src="assets/chakkhu.png" alt="" width="52" height="52">
-      <div><span class="status st-ok">Released</span><h3>Chakkhu <span class="km">ចក្ខុ</span>: Khmer OCR</h3>
-      <p>The sister project: Akkhara types the letters, Chakkhu reads them from photos, scans, old documents and screenshots. 4.5% errors on the KHOB benchmark; free demo and API.</p></div>
+      <div><span class="status st-ok">Released</span><h3>Chakkhu <span class="km">ចក្ខុ</span></h3>
+      <p>Khmer OCR: reads Khmer and English from photos, scans, old documents and screenshots. Free demo and API.</p></div>
     </a>
+    <a class="card sister" style="margin-top:0" href="https://muyleanging.github.io/voxpocket-web/" target="_blank" rel="noopener">
+      <span style="width:52px;height:52px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7c3aed,#ec4899)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg></span>
+      <div><span class="status st-ok">Released</span><h3>VoxPocket</h3>
+      <p>Open Khmer text-to-speech: clone a voice, add a style, or design one.</p></div>
+    </a>
+    <a class="card sister" style="margin-top:0" href="https://muyleanging.github.io/sota-web/" target="_blank" rel="noopener">
+      <img src="assets/sota.png" alt="" width="52" height="52">
+      <div><span class="status st-soon">In development</span><h3>Sota <span class="km">សោតៈ</span></h3>
+      <p>Khmer + English speech recognition: turns speech into text.</p></div>
+    </a>
+    </div>
   </div>
 </section>
 

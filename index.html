@@ -227,11 +227,22 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   .cta .btn{flex:1;justify-content:center;white-space:nowrap;padding:12px 10px;font-size:15px}
   footer .wrap{flex-direction:column}
 }
+
+/* copyable code (Use it + Citation), same look as the VoxPocket and Chakkhu sites */
+.codebox{position:relative;margin-top:10px}
+.codebox pre.dark{margin:0;background:#0b1020;color:#e2e8f0;border:1px solid var(--line);border-radius:14px;padding:16px 110px 16px 18px;font:13px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;overflow-x:auto;white-space:pre}
+.codebox .copybtn{position:absolute;top:10px;right:10px;background:#fff;color:#0b1020;border:1px solid #fff}
+.codebox .copybtn:hover{transform:none;background:#e5e7eb}
+.usecode .card{display:block}
+.usecode .card h3{margin-bottom:4px}
+@media (max-width:640px){.codebox pre.dark{font-size:12px;padding:48px 12px 14px}}
 </style>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
 <!-- icons: Lucide (ISC) and Simple Icons (CC0), the same sets react-icons uses -->
+<symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /> <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></symbol>
+<symbol id="i-quote" viewBox="0 0 24 24"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /> <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z" /></symbol>
 <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7" /> <path d="M12 19V5" /></symbol>
 <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14" /> <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></symbol>
 <symbol id="i-cpu" viewBox="0 0 24 24"><rect width="16" height="16" x="4" y="4" rx="2" /> <rect width="6" height="6" x="9" y="9" rx="1" /> <path d="M15 2v2" /> <path d="M15 20v2" /> <path d="M2 15h2" /> <path d="M2 9h2" /> <path d="M20 15h2" /> <path d="M20 9h2" /> <path d="M9 2v2" /> <path d="M9 20v2" /></symbol>
@@ -287,6 +298,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   <a href="#windows"><svg class="ic ib" aria-hidden="true"><use href="#b-windows"/></svg>Windows install guide</a>
   <a href="#mac"><svg class="ic ib" aria-hidden="true"><use href="#b-apple"/></svg>Mac install guide</a>
   <a href="#open"><svg class="ic" aria-hidden="true"><use href="#i-layers"/></svg>Open source</a>
+  <a href="#cite"><svg class="ic" aria-hidden="true"><use href="#i-quote"/></svg>Citation</a>
   <a href="#support"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg>Support Akkhara</a>
   <div class="grp">Online</div>
   <a href="https://huggingface.co/spaces/muyleanging/Akkhara-Demo" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg>Try the web demo<svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
@@ -508,6 +520,35 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <a class="card" href="https://github.com/MuyleangIng/akkhara-desktop" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-monitor"/></svg></div><h3>Windows &amp; Mac</h3><p>Windows keyboard (TSF, C++), Mac keyboard (InputMethodKit, Swift) and the desktop app.</p></a>
       <a class="card" href="https://huggingface.co/datasets/muyleanging/Akkhara-Sing-Khmer" target="_blank" rel="noopener"><div class="icon"><svg class="ic" aria-hidden="true"><use href="#i-database"/></svg></div><h3>Dataset</h3><p>380k Sing Khmer → Khmer pairs (access on request).</p></a>
     </div>
+    <div class="eyebrow" style="margin-top:30px">Use it in your code</div>
+    <div class="grid usecode" style="grid-template-columns:1fr;margin-top:6px">
+      <div class="card"><h3>Akkhara-Mini-Khmer-ONNX · small and fast</h3><p class="meta">18M parameters, the model inside the keyboards</p>
+        <div class="codebox"><button class="btn btn-sm copybtn" data-copy="code-mini"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button><pre class="dark" id="code-mini"># pip install torch transformers
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+model_id = "muyleanging/Akkhara-Mini-Khmer-ONNX"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_id)
+
+inputs = tokenizer(["nh jg tv sala rean"], return_tensors="pt")
+out = model.generate(**inputs, num_beams=5, num_return_sequences=5, max_new_tokens=160)
+print(tokenizer.batch_decode(out, skip_special_tokens=True))
+# ['ខ្ញុំចង់ទៅសាលារៀន', ...]</pre></div></div>
+      <div class="card"><h3>Akkhara-ByT5-Small-Khmer · most accurate</h3><p class="meta">300M parameters, best on formal text</p>
+        <div class="codebox"><button class="btn btn-sm copybtn" data-copy="code-byt5"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button><pre class="dark" id="code-byt5"># pip install torch transformers
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+
+model_id = "muyleanging/Akkhara-ByT5-Small-Khmer"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_id)
+
+texts = ["nh jg tv sala rean", "sl oun nah"]
+inputs = tokenizer(texts, return_tensors="pt", padding=True)
+out = model.generate(**inputs, num_beams=5, num_return_sequences=5, max_new_tokens=128)
+cands = tokenizer.batch_decode(out, skip_special_tokens=True)
+for i, t in enumerate(texts):
+    print(t, "→", cands[i * 5:(i + 1) * 5])</pre></div></div>
+    </div>
     <div class="eyebrow" style="margin-top:30px">Sister projects</div>
     <div class="grid g3" style="margin-top:6px">
     <a class="card sister" style="margin-top:0" href="https://muyleanging.github.io/chakkhu-web/" target="_blank" rel="noopener">
@@ -526,6 +567,30 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
       <p>Khmer + English speech recognition: turns speech into text.</p></div>
     </a>
     </div>
+  </div>
+</section>
+
+<section id="cite">
+  <div class="wrap">
+    <div class="eyebrow">Citation</div>
+    <h2>Using Akkhara? Please cite it</h2>
+    <div class="codebox"><button class="btn btn-sm copybtn" data-copy="bib"><svg class="ic" aria-hidden="true"><use href="#i-copy"/></svg>Copy</button><pre class="dark" id="bib">@misc{ing2026akkhara,
+  author    = {Ing, Muyleang},
+  title     = {Akkhara: A Sing Khmer to Khmer Script Transliteration Model and Keyboard},
+  year      = {2026},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/muyleanging/Akkhara-ByT5-Small-Khmer}
+}
+
+@misc{ing2026akkharadata,
+  author    = {Ing, Muyleang},
+  title     = {Akkhara Sing Khmer: A Sing Khmer to Khmer Script Dataset},
+  year      = {2026},
+  publisher = {Hugging Face},
+  url       = {https://huggingface.co/datasets/muyleanging/Akkhara-Sing-Khmer}
+}</pre></div>
+    <p class="meta" style="margin-top:10px">Built on ByT5 (Google, Apache-2.0); Khmer text from Wikipedia (CC BY-SA), MADLAD-400 and CC-100;
+      chat spellings from Chhunneng (MIT) and seanghay (CC BY-SA). Please also credit them. Models: Apache-2.0 · dataset: access on request.</p>
   </div>
 </section>
 
@@ -670,6 +735,13 @@ document.getElementById('copy').onclick=async(e)=>{
   catch(_){e.target.textContent='008072001';}
   setTimeout(()=>e.target.textContent='Copy account number',2000);
 };
+
+// ---- copy buttons: <button class="copybtn" data-copy="id-of-pre">
+document.querySelectorAll('.copybtn').forEach(b=>b.onclick=async()=>{
+  const el=document.getElementById(b.dataset.copy);
+  try{await navigator.clipboard.writeText(el.innerText)}catch(e){const r=document.createRange();r.selectNodeContents(el);getSelection().removeAllRanges();getSelection().addRange(r);document.execCommand('copy')}
+  const old=b.innerHTML;b.innerHTML='Copied ✓';setTimeout(()=>b.innerHTML=old,1800);
+});
 </script>
 </body>
 </html>

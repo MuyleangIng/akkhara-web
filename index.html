@@ -155,6 +155,12 @@ table.ex td:last-child{font-size:19px}
 .acct{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:30px;letter-spacing:.06em;font-weight:700}
 .copy{align-self:flex-start;background:#ffffff22;color:#fff;border:1px solid #ffffff44}
 .bank small{opacity:.85}
+.bank-row{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+.bank-row .acct{font-size:24px;white-space:nowrap}
+.bank-row>*{min-width:0}
+.bank .khqr{width:100%;height:auto;display:block;border-radius:12px;background:#fff}
+.bank-row .acct-sm{font-size:20px}
+.bank .copy{margin-top:8px}
 
 /* anchors land below the sticky bar */
 section,header{scroll-margin-top:70px}
@@ -227,6 +233,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
   .cta .btn{flex:1;justify-content:center;white-space:nowrap;padding:12px 10px;font-size:15px}
   footer .wrap{flex-direction:column}
 }
+@media (max-width:560px){.bank-row{grid-template-columns:1fr}.bank .khqr{max-width:230px;margin:0 auto}}
 
 /* copyable code (Use it + Citation), same look as the VoxPocket and Chakkhu sites */
 .codebox{position:relative;margin-top:10px}
@@ -597,21 +604,33 @@ for i, t in enumerate(texts):
 <section id="support" class="alt">
   <div class="wrap">
     <div class="eyebrow">Support Akkhara</div>
-    <h2>Help bring Akkhara to iPhone and the app stores</h2>
-    <p class="sub">Akkhara is free and made by one person. Publishing on the stores costs money every year; your support pays for it.</p>
+    <h2>Help bring Akkhara to iPhone, and help sick children</h2>
+    <p class="sub">Akkhara is free and made by one person. Donations are split: part pays the app store fees that keep Akkhara free,
+      and the rest goes to <b>Kantha Bopha Children's Hospital</b>, which treats sick children in Cambodia.</p>
     <div class="support">
       <div class="card">
         <div class="goal"><div><b>iPhone keyboard on the App Store</b><small>Apple Developer Program, every year</small></div><div class="price">$99 / year</div></div>
         <div class="goal"><div><b>Android on Google Play</b><small>Google Play developer account, one time</small></div><div class="price">$25</div></div>
         <div class="goal"><div><b>Signed Windows installer</b><small>no more "Windows protected your PC" warning</small></div><div class="price">later</div></div>
-        <p class="meta" style="margin:14px 0 0">Every donation goes to these accounts first. Thank you 🙏</p>
+        <div class="goal"><div><b>Kantha Bopha Children's Hospital</b><small>the rest of every donation</small></div><div class="price">♥</div></div>
+        <p class="km" style="margin:14px 0 0;color:var(--ink2);line-height:1.75">ប្រាក់ឧបត្ថម្ភត្រូវបានចែកជាពីរ៖ មួយផ្នែកសម្រាប់ថ្លៃ App Store និង Google Play ហើយផ្នែកដែលនៅសល់ នឹងប្រគល់ជូន <b>មន្ទីរពេទ្យកុមារគន្ធបុប្ផា</b> ដើម្បីជួយព្យាបាលកុមារឈឺនៅកម្ពុជា។</p>
+        <p class="meta" style="margin:10px 0 0">Any amount helps. Thank you 🙏 <span class="km">អរគុណច្រើន!</span></p>
       </div>
       <div class="bank">
         <div class="label">Donate with ABA Bank</div>
-        <div class="acct" id="acct">008 072 001</div>
-        <div>Account name: <b>ING MUYLEANG</b></div>
-        <button class="btn btn-sm copy" id="copy">Copy account number</button>
-        <small>Open ABA Mobile → Transfer → ABA account → paste the number. Any amount helps.</small>
+        <div class="bank-row">
+          <img class="khqr" src="assets/aba-khqr.jpg" alt="ABA KHQR code for ING MUYLEANG" width="494" height="660" loading="lazy">
+          <div>
+            <div>Account name: <b>ING MUYLEANG</b></div>
+            <div class="label" style="margin-top:12px">USD account</div>
+            <div class="acct" id="acct">008 072 001</div>
+            <button class="btn btn-sm copy" data-acct="008072001">Copy USD number</button>
+            <div class="label" style="margin-top:14px">KHR account</div>
+            <div class="acct acct-sm">600 726 637</div>
+            <button class="btn btn-sm copy" data-acct="600726637">Copy KHR number</button>
+          </div>
+        </div>
+        <small>Open ABA Mobile → Transfer → ABA account → paste the number, or tap Scan QR. Any amount helps.</small>
       </div>
     </div>
   </div>
@@ -620,7 +639,7 @@ for i, t in enumerate(texts):
 <footer>
   <div class="wrap">
     <div>© 2026 Ing Muyleang · Code and models Apache-2.0</div>
-    <div><a href="https://github.com/MuyleangIng">GitHub</a> · <a href="https://huggingface.co/muyleanging">Hugging Face</a> · <a href="https://github.com/MuyleangIng/akkhara-desktop/issues">Report a problem</a></div>
+    <div><a href="https://github.com/MuyleangIng">GitHub</a> · <a href="https://huggingface.co/muyleanging">Hugging Face</a> · <a href="https://github.com/MuyleangIng/akkhara-desktop/issues">Report a problem</a> · <a href="#support">Donate ♥ Kantha Bopha</a></div>
   </div>
 </footer>
 
@@ -730,11 +749,12 @@ document.getElementById('copymac').onclick=async(e)=>{
 };
 
 // ---- copy the account number ------------------------------------------------------------------
-document.getElementById('copy').onclick=async(e)=>{
-  try{await navigator.clipboard.writeText('008072001'); e.target.textContent='Copied ✓';}
-  catch(_){e.target.textContent='008072001';}
-  setTimeout(()=>e.target.textContent='Copy account number',2000);
-};
+document.querySelectorAll('.bank .copy').forEach(b=>b.onclick=async()=>{
+  const t=b.textContent;
+  try{await navigator.clipboard.writeText(b.dataset.acct); b.textContent='Copied ✓';}
+  catch(_){b.textContent=b.dataset.acct;}
+  setTimeout(()=>b.textContent=t,2000);
+});
 
 // ---- copy buttons: <button class="copybtn" data-copy="id-of-pre">
 document.querySelectorAll('.copybtn').forEach(b=>b.onclick=async()=>{
